@@ -8,41 +8,95 @@ package ca.sheridancollege.project;
 /**
  * A class that models each Player in the game. Players have an identifier, which should be unique.
  * @author dancye, 2018
+ * // @modified by Rahul, Kiret, Vassu, Chahat, 2022
  */
-public abstract class Player 
-{
+import java.util.ArrayList;
+import java.util.List;
+ 
+public class Player {
+
     private String playerID; //the unique ID for this player
-    
+    private List<Card> hand;
+
     /**
      * A constructor that allows you to set the player's unique ID
-     * @param name the unique ID to assign to this player.
+     *
+     * 
      */
-    public Player(String name)
-    {
-        playerID= name;
-    }
-    
-    /**
-     * @return the playerID
-     */
-    public String getPlayerID() 
-    {
-        return playerID;
+    public Player(String name) {
+        playerID = name;
     }
 
     /**
-     * Ensure that the playerID is unique
-     * @param givenID the playerID to set
+     * no argument Constructor
      */
-    public void setPlayerID(String givenID) 
-    {
-        playerID = givenID;
+    public Player() {
+        this.hand = new ArrayList<Card>();
     }
-    
+
     /**
-     * The method to be instantiated when you subclass the Player class
-     * with your specific type of Player and filled in with logic to play your game.
+     *
+     * @return a hand of card as List
      */
-    public abstract void play();
+    public List<Card> getHandOfCards() {
+        return hand;
+    }
+
+    /**
+     * @return the playerID
+     */
+    public String getPlayerID() {
+        return playerID;
+    }
+
     
+    public static boolean checkId(String name) {
+        if(name.length() >= 3) {
+            return true;
+        }
+        return false;
+    }
+
+    
+    public static boolean checkChar(String name) {
+        for (int i = 0; i < name.length(); i++) {
+            int ch = name.charAt(i);
+            if (!Character.isLetterOrDigit(ch)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    
+    public static boolean checkUnique(String player1, String player2) {
+
+        if (player1.equals(player2)) {
+            throw new IllegalArgumentException("Error, Enter unique user Id");
+        }
+
+        return true;
+    }
+
+    
+     
+    public void setPlayerID(String givenID) {
+        if (checkId(givenID)
+                && checkChar(givenID)) {
+
+            this.playerID = givenID;
+
+        } else {
+            throw new IllegalArgumentException("Wrong value, please try again!");
+        }
+    }
+
+    /**
+     *
+     * @return a String representation of the Player
+     */
+    @Override
+    public String toString() {
+        return String.format("Player: %s", this.playerID);
+    }
 }

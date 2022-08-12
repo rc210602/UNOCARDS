@@ -1,57 +1,121 @@
 /**
  * SYST 17796 Project Winter 2019 Base code.
  * Students can modify and extend to implement their game.
- * Add your name as a modifier and the date!
  */
 package ca.sheridancollege.project;
 
+
+
+
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 /**
  * A concrete class that represents any grouping of cards for a Game.
- * HINT, you might want to subclass this more than once.
- * The group of cards has a maximum size attribute which is flexible for reuse.
+ *
  * @author dancye
+ *
+ * @modified by Rahul, Kiret, Vassu, Chahat, 2022
  */
-public class GroupOfCards 
-{
-   
-    //The group of cards, stored in an ArrayList
-    private ArrayList <Card> cards;
-    private int size;//the size of the grouping
-    
-    public GroupOfCards(int givenSize)
-    {
-        size = givenSize;
-    }
-    
+public class GroupOfCards { 
+//The group of cards, stored in an ArrayList enum type data memebers
+
+    private List<Card> cardPile;
+
     /**
-     * A method that will get the group of cards as an ArrayList
-     * @return the group of cards.
+     * Constructor that set the ArrayList of the cardPile()
      */
-    public ArrayList<Card> showCards()
-    {
-        return cards;
-    }
-    
-    public void shuffle()
-    {
-        Collections.shuffle(cards);
+    public GroupOfCards() {
+        this.cardPile = new ArrayList<>();
+        for (CardValue value : CardValue.values()) {
+            for (CardColor color : CardColor.values()) {
+                cardPile.add(new Card(value, color));
+            }
+        }
     }
 
     /**
-     * @return the size of the group of cards
+     *
+     * @return list of cardPile
      */
-    public int getSize() {
-        return size;
+    List<Card> getCardPile() {
+        return cardPile;
+    }
+     /**
+      * this a setter to set the cardPile
+      * @param cardPile 
+      */
+    public void setCardPile(List<Card> cardPile) {
+        this.cardPile = cardPile;
+    }
+ 
+    /**
+     * A method that shuffle the deck.
+     */
+    public void shuffle() {
+        Random rand = new Random();
+        //Generate two random numbers between 0 to 76
+        for (int i = 0; i < 7; i++) {
+            int firstCard = rand.nextInt(this.cardPile.size());
+            int secondCard = rand.nextInt(this.cardPile.size());
+            Collections.swap(cardPile, firstCard, secondCard);
+        }
     }
 
     /**
-     * @param givenSize the max size for the group of cards
+     *
+     * @param player that type of Player Get next card and add to hand of the
+     * player
      */
-    public void setSize(int givenSize) {
-        size = givenSize;
+    public void dealCard(Player player) {
+
+        for (int i = 0; i < 7; i++) {
+            Card deleteCard = cardPile.remove(0);
+            player.getHandOfCards().add(deleteCard);
+        }
+
     }
-    
-}//end class
+
+    public void getOneCard(Player player) {
+        Card deleteCard = cardPile.remove(0);
+        player.getHandOfCards().add(deleteCard);
+    }
+
+    /**
+     *
+     * @return to deal card to the player
+     */
+    public Card dealCard() {
+        Card removedCard = cardPile.remove(0);
+        return removedCard;
+    }
+
+    /**
+     *
+     * @return a method to draw a card
+     */
+    public Card drawCard() {
+        if (cardPile.isEmpty()) {
+            System.out.println("It is a draw");
+        }
+        return cardPile.remove(0);
+    }
+
+    //Size of the deck for testing purpose
+    public int getSizeOfCardPile() {
+        return cardPile.size();
+    }
+
+    /**
+     *
+     * @return A String representation of the Object
+     */
+    @Override
+    public String toString() {
+        return "Deck{"
+                + "cardDeck=" + cardPile
+                + '}';
+    }
+}
